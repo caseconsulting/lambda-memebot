@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  memebot
+
+  Returns meme with given text
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Api:
+    Name: memebot
+    EndpointConfiguration: REGIONAL
+  Function:
+    Runtime: nodejs14.x
+    Timeout: 3
+    Tags:
+      Application: bots
+    Environment:
+      Variables:
+        MemeBuildAPIKey: '{{resolve:ssm:/MemeBuild/APIKey:1}}'
+
+Resources:
+  MemeBotFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: memebot
+      CodeUri: ./
+      Handler: app.handler
+      Description: Returns meme with given text
+      Events:
+        MemeBot:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /
+            Method: post
+  MemeBotFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn:
+      - MemeBotFunction
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${MemeBotFunction}
+      RetentionInDays: 30
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  memebotApi:
+    Description: 'API Gateway endpoint URL for Prod stage for memebot function'
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/'
+  MemeBotFunction:
+    Description: 'memebot Lambda Function ARN'
+    Value: !GetAtt MemeBotFunction.Arn
+  MemeBotFunctionIamRole:
+    Description: 'Implicit IAM Role created for memebot function'
+    Value: !GetAtt MemeBotFunctionRole.Arn
