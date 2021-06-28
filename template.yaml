@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   memebot
@@ -12,12 +12,12 @@ Globals:
     EndpointConfiguration: REGIONAL
   Function:
     Runtime: nodejs14.x
-    Timeout: 3
+    Timeout: 5
     Tags:
       Application: bots
     Environment:
       Variables:
-        MemeBuildAPIKey: '{{resolve:ssm:/MemeBuild/APIKey:1}}'
+        MemeBuildAPIKey: "{{resolve:ssm:/MemeBuild/APIKey:1}}"
 
 Resources:
   MemeBotFunction:
@@ -46,11 +46,11 @@ Outputs:
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   memebotApi:
-    Description: 'API Gateway endpoint URL for Prod stage for memebot function'
-    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/'
+    Description: "API Gateway endpoint URL for Prod stage for memebot function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
   MemeBotFunction:
-    Description: 'memebot Lambda Function ARN'
+    Description: "memebot Lambda Function ARN"
     Value: !GetAtt MemeBotFunction.Arn
   MemeBotFunctionIamRole:
-    Description: 'Implicit IAM Role created for memebot function'
+    Description: "Implicit IAM Role created for memebot function"
     Value: !GetAtt MemeBotFunctionRole.Arn
