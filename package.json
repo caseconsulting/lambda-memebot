@@ -7,7 +7,7 @@
   "author": "Case Consulting",
   "scripts": {
     "build": "sam build -t template.yaml",
-    "deploy": "npm run build && sam deploy --template-file template.yaml --region us-east-1 --capabilities CAPABILITY_IAM --s3-prefix lambda-memebot --s3-bucket case-consulting-sam-deployments --stack-name lambda-memebot",
+    "deploy": "npm run build && sam deploy --template-file template.yaml --region us-east-1 --capabilities CAPABILITY_IAM --s3-prefix lambda-memebot --s3-bucket case-consulting-mgmt-sam-deployments --stack-name lambda-memebot --profile mgmt",
     "local": "npm run build && sam local invoke MemeBotFunction -e event.json"
   },
   "dependencies": {
