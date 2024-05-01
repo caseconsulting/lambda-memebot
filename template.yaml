@@ -11,7 +11,7 @@ Globals:
     Name: memebot
     EndpointConfiguration: REGIONAL
   Function:
-    Runtime: nodejs18.x
+    Runtime: nodejs20.x
     Timeout: 5
     Tags:
       Application: bots
