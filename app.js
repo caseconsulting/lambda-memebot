@@ -17,13 +17,14 @@ const FormData = require('form-data');
  *
  */
 exports.handler = async (event, context) => {
-  let imgUrl, meme, response;
+  try {
+    let imgUrl, meme, response;
 
-  // Load meme templates
-  //   Reference: https://imgflip.com/api
-  const MEME_TEMPLATE_ENDPOINT = 'https://api.imgflip.com/get_memes';
-  return axios.get(MEME_TEMPLATE_ENDPOINT).then((result) => {
-    const templates = result.data.data.memes;
+    // Load meme templates
+    //   Reference: https://imgflip.com/api
+    const MEME_TEMPLATE_ENDPOINT = 'https://api.imgflip.com/get_memes';
+    const templateResult = await axios.get(MEME_TEMPLATE_ENDPOINT);
+    const templates = templateResult.data.data.memes;
 
     // Randomly select meme template
     imgUrl = templates[Math.floor(Math.random() * templates.length)].url;
@@ -60,24 +61,20 @@ exports.handler = async (event, context) => {
     formData.append('imgUrl', imgUrl);
 
     // Generate meme
-    return axios
-      .post(url, formData, { headers: formData.getHeaders() })
-      .then((result) => {
-        meme = result.data.url;
-        response = {
-          statusCode: 200,
-          body: meme
-        };
-        console.log('Generated this meme:', meme);
-        return response;
-      })
-      .catch((error) => {
-        response = {
-          statusCode: 200,
-          body: 'Something went wrong :( https://media.giphy.com/media/l41JNsXAvFvoHvWJW/giphy.meme'
-        };
-        console.log('Something went wrong', error);
-        return response;
-      });
-  });
+    const memeResult = await axios.post(url, formData, { headers: formData.getHeaders() });
+    meme = memeResult.data.url;
+    response = {
+      statusCode: 200,
+      body: meme
+    };
+    console.log('Generated this meme:', meme);
+    return response;
+  } catch (error) {
+    response = {
+      statusCode: 200,
+      body: 'Something went wrong :( https://media.giphy.com/media/l41JNsXAvFvoHvWJW/giphy.meme'
+    };
+    console.log('Something went wrong', error);
+    return response;
+  }
 };
