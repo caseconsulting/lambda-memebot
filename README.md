@@ -8,6 +8,27 @@ This project contains source code and supporting files for a serverless applicat
 
 The application uses several AWS resources, including Lambda functions and an IAM Role. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
 
+## AWS SSO Configuration
+
+### AWS Management Account - _mgmt_ Profile
+
+If AWS SSO has not yet been configured, follow instructions in https://github.com/caseconsulting/expense-app-api/blob/master/README.md#aws-sso-configuration to complete initial SSO configuration. **lambda-memebot** is deployed to the CASE Management AWS account, so you need to make sure you've configured a _mgmt_ profile for the _Case Consulting Management_ AWS account.
+
+### AWS SSO Login
+
+To explicitly obtain AWS credentials from AWS SSO, run `aws sso login --profile mgmt`.
+Your web browser should open a new tab, where you should be required to login to Google with your **@consultwithcase.com**
+email address (unless you recently did so) and then press the _Allow_ button to explicitly permit the authorize request.
+
+To remove AWS credentials, run `aws sso logout --profile mgmt`. This will also clear any authorization.
+Therefore, a subsequent login will launch the web browser again for a new authorization request.
+
+### AWS Prod Account - _mgmt_ Profile
+
+If you have been given access to the company's AWS Prod account, run the `aws configure sso` command (one-time)
+to configure a _prod_ profile.
+Choose the same values, except select _Case Consulting Prod_ AWS account and enter _prod_ as **CLI profile name**.
+
 ## Deploy the sample application
 
 The Serverless Application Model Command Line Interface (SAM CLI) is an extension of the AWS CLI that adds functionality for building and testing Lambda applications. It uses Docker to run your functions in an Amazon Linux environment that matches Lambda. It can also emulate your application's build environment and API.
