@@ -23,12 +23,6 @@ email address (unless you recently did so) and then press the _Allow_ button to 
 To remove AWS credentials, run `aws sso logout --profile mgmt`. This will also clear any authorization.
 Therefore, a subsequent login will launch the web browser again for a new authorization request.
 
-### AWS Prod Account - _mgmt_ Profile
-
-If you have been given access to the company's AWS Prod account, run the `aws configure sso` command (one-time)
-to configure a _prod_ profile.
-Choose the same values, except select _Case Consulting Prod_ AWS account and enter _prod_ as **CLI profile name**.
-
 ## Deploy the sample application
 
 The Serverless Application Model Command Line Interface (SAM CLI) is an extension of the AWS CLI that adds functionality for building and testing Lambda applications. It uses Docker to run your functions in an Amazon Linux environment that matches Lambda. It can also emulate your application's build environment and API.
