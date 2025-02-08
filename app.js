@@ -1,6 +1,5 @@
 import axios from 'axios';
 import FormData from 'form-data';
-import { forEach } from 'lodash-es';
 
 /**
  *
@@ -36,13 +35,13 @@ export const handler = async (event, context) => {
     const firstHalfLength = Math.round(words.length / 2);
     let topText = '';
     let bottomText = '';
-    forEach(words, function (word, index) {
+    for (const [index, word] of words.entries()) {
       if (index < firstHalfLength) {
         topText += (index === 0 ? '' : ' ') + word;
       } else {
         bottomText += (index === firstHalfLength ? '' : ' ') + word;
       }
-    });
+    }
     console.log('topText:', topText);
     console.log('bottomText:', bottomText);
 
