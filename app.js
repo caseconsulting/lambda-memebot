@@ -15,7 +15,7 @@ import { forEach } from 'lodash-es';
  *
  */
 export const handler = async (event, context) => {
-  let imgUrl, meme, response;
+  let response;
 
   try {
     // Load meme templates
@@ -25,7 +25,7 @@ export const handler = async (event, context) => {
     const templates = templateResult.data.data.memes;
 
     // Randomly select meme template
-    imgUrl = templates[Math.floor(Math.random() * templates.length)].url;
+    const imgUrl = templates[Math.floor(Math.random() * templates.length)].url;
     console.log('imgUrl:', imgUrl);
 
     // Parse phrase (command) into two portions (by word count)
@@ -60,7 +60,7 @@ export const handler = async (event, context) => {
 
     // Generate meme
     const memeResult = await axios.post(url, formData, { headers: formData.getHeaders() });
-    meme = memeResult.data.url;
+    const meme = memeResult.data.url;
     response = {
       statusCode: 200,
       body: meme
