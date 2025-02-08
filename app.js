@@ -1,8 +1,6 @@
-'use strict';
-
-const _ = require('lodash');
-const axios = require('axios');
-const FormData = require('form-data');
+import axios from 'axios';
+import FormData from 'form-data';
+import { forEach } from 'lodash-es';
 
 /**
  *
@@ -16,10 +14,10 @@ const FormData = require('form-data');
  * @returns {Object} object - API Gateway Lambda Proxy Output Format
  *
  */
-exports.handler = async (event, context) => {
-  try {
-    let imgUrl, meme, response;
+export const handler = async (event, context) => {
+  let imgUrl, meme, response;
 
+  try {
     // Load meme templates
     //   Reference: https://imgflip.com/api
     const MEME_TEMPLATE_ENDPOINT = 'https://api.imgflip.com/get_memes';
@@ -38,7 +36,7 @@ exports.handler = async (event, context) => {
     const firstHalfLength = Math.round(words.length / 2);
     let topText = '';
     let bottomText = '';
-    _.forEach(words, function (word, index) {
+    forEach(words, function (word, index) {
       if (index < firstHalfLength) {
         topText += (index === 0 ? '' : ' ') + word;
       } else {
@@ -70,11 +68,11 @@ exports.handler = async (event, context) => {
     console.log('Generated this meme:', meme);
     return response;
   } catch (error) {
+    console.log('Something went wrong:', error.message);
     response = {
       statusCode: 200,
       body: 'Something went wrong :( https://media.giphy.com/media/l41JNsXAvFvoHvWJW/giphy.meme'
     };
-    console.log('Something went wrong', error);
     return response;
   }
 };

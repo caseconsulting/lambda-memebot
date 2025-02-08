@@ -2,17 +2,20 @@
   "name": "lambda-memebot",
   "version": "1.22.0",
   "private": true,
+  "type": "module",
+  "exports": "./app.js",
   "description": "Returns meme with given text",
   "repository": "https://github.com/caseconsulting/lambda-memebot",
   "author": "CASE",
   "scripts": {
     "build": "sam build -t template.yaml",
     "deploy": "npm run build && sam deploy --template-file template.yaml --region us-east-1 --capabilities CAPABILITY_IAM --s3-prefix lambda-memebot --s3-bucket case-consulting-mgmt-sam-deployments --stack-name lambda-memebot --profile mgmt",
-    "local": "npm run build && sam local invoke MemeBotFunction -e event.json"
+    "local": "npm run build && sam local invoke MemeBotFunction -e event.json --profile mgmt",
+    "login": "aws sso login --profile mgmt"
   },
   "dependencies": {
     "axios": "1.7.9",
     "form-data": "4.0.1",
-    "lodash": "4.17.21"
+    "lodash-es": "4.17.21"
   }
 }
