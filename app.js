@@ -1,5 +1,4 @@
 import axios from 'axios';
-import FormData from 'form-data';
 
 /**
  *
@@ -17,7 +16,7 @@ export const handler = async (event, context) => {
   let response;
 
   try {
-    // Load meme templates
+    // Get meme templates
     //   Reference: https://imgflip.com/api
     const MEME_TEMPLATE_ENDPOINT = 'https://api.imgflip.com/get_memes';
     const templateResult = await axios.get(MEME_TEMPLATE_ENDPOINT);
@@ -45,26 +44,15 @@ export const handler = async (event, context) => {
     console.log('topText:', topText);
     console.log('bottomText:', bottomText);
 
-    // Build Meme Build URL
-    //   Reference: https://memebuild.com/api
-    const MEMEBUILD_ENDPOINT = 'https://memebuild.com/api/1.0/generateMeme';
-    const apiKey = `${process.env.MemeBuildAPIKey}`;
-    const url = `${MEMEBUILD_ENDPOINT}?api-key=${apiKey}`;
-
-    // Build multipart form data
-    let formData = new FormData();
-    formData.append('topText', topText);
-    formData.append('bottomText', bottomText);
-    formData.append('imgUrl', imgUrl);
-
-    // Generate meme
-    const memeResult = await axios.post(url, formData, { headers: formData.getHeaders() });
-    const meme = memeResult.data.url;
+    // Build Meme Gen URL
+    //   Reference: https://github.com/jacebrowning/memegen
+    const MEMEGEN_ENDPOINT = 'https://api.memegen.link/images/custom/';
+    const url = encodeURI(`${MEMEGEN_ENDPOINT}${topText}/${bottomText}/my_background.png?background=${imgUrl}`);
     response = {
       statusCode: 200,
-      body: meme
+      body: url
     };
-    console.log('Generated this meme:', meme);
+    console.log('Returning Meme Gen URL:', url);
     return response;
   } catch (error) {
     console.log('Something went wrong:', error.message);

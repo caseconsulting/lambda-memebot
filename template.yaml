@@ -12,12 +12,9 @@ Globals:
     EndpointConfiguration: REGIONAL
   Function:
     Runtime: nodejs22.x
-    Timeout: 10
+    Timeout: 5
     Tags:
       Application: bots
-    Environment:
-      Variables:
-        MemeBuildAPIKey: '{{resolve:ssm:/MemeBuild/APIKey:1}}'
 
 Resources:
   MemeBotFunction:
